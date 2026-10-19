@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE COMMUNITY — 100% Heavyweight Cotton</title>
+    <title>THE COMMUNITY — Heavyweight Essentials</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .size-btn.active { background-color: #fff; color: #000; border-color: #fff; }
-        
-        /* Плавные анимации появления */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -37,12 +35,11 @@
         </div>
     </header>
 
-    <!-- Первый экран (Hero) в стиле Tilda, но с динамикой -->
+    <!-- Первый экран -->
     <section class="relative h-screen flex items-center justify-center overflow-hidden">
-        <!-- Фоновое изображение с темным премиальным затемнением -->
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&w=2000&q=80" alt="Crowd background" class="w-full h-full object-cover opacity-30 scale-105 animate-pulse duration-[10000ms]">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/70 to-[#0a0a0c]/40"></div>
+            <img src="heart-front.jpg" alt="Background" class="w-full h-full object-cover opacity-20 scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/80 to-[#0a0a0c]/50"></div>
         </div>
 
         <div class="relative z-10 max-w-5xl mx-auto px-6 text-center animate-fade-in mt-12">
@@ -56,17 +53,17 @@
                 Добро пожаловать в развивающийся бренд одежды The Community.<br class="hidden sm:inline"> На сайте представлены вещи лучшего качества из 100% хлопка.
             </p>
             <a href="#catalog" class="inline-block bg-white text-black font-extrabold uppercase tracking-widest px-8 py-4 rounded-full text-xs hover:bg-zinc-200 transition-all duration-300 shadow-2xl hover:scale-105">
-                Смотреть коллекцию
+                Смотреть каталог
             </a>
         </div>
     </section>
 
-    <!-- Каталог (10 позиций) -->
+    <!-- Каталог -->
     <main id="catalog" class="max-w-7xl mx-auto px-6 py-24 border-t border-zinc-800/80">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
             <div>
-                <p class="text-xs uppercase tracking-[0.3em] text-zinc-500 mb-3">Лимитированная серия</p>
-                <h2 class="text-3xl sm:text-4xl font-black tracking-tight uppercase text-white">Каталог изделий (10 видов)</h2>
+                <p class="text-xs uppercase tracking-[0.3em] text-zinc-500 mb-3">Коллекция одежды</p>
+                <h2 class="text-3xl sm:text-4xl font-black tracking-tight uppercase text-white">Каталог изделий</h2>
             </div>
             <span class="text-xs text-zinc-400 font-medium">Выберите размер прямо на карточке товара</span>
         </div>
@@ -82,7 +79,7 @@
         </div>
     </div>
 
-    <!-- Подвал в стиле вашего сайта с Tilda -->
+    <!-- Футер -->
     <footer class="bg-[#070709] border-t border-zinc-800/80 text-zinc-400 text-sm py-20 mt-24">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
             <div>
@@ -115,7 +112,7 @@
         </div>
     </footer>
 
-    <!-- Боковая корзина -->
+    <!-- Корзина -->
     <div id="cart-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex justify-end">
         <div class="bg-[#121215] border-l border-zinc-800 w-full max-w-md h-full flex flex-col justify-between p-6 sm:p-8 overflow-y-auto">
             <div>
@@ -145,26 +142,40 @@
     </div>
 
     <script>
-        // ==========================================
-        // НАСТРОЙКИ TELEGRAM БОТА
-        // ==========================================
         const TELEGRAM_BOT_TOKEN = 'ВАШ_ТОКЕН_ОТ_BOTFATHER';
         const TELEGRAM_CHAT_ID = 'ВАШ_CHAT_ID';
 
-        // ==========================================
-        // 10 ВИДОВ ФУТБОЛОК (100% Хлопок)
-        // ==========================================
         const products = [
-            { id: 1, name: "Heavy Boxy Tee / Jet Black", price: 3200, density: "240 GSM • 100% Хлопок", img: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=800&q=80", desc: "Ультраплотный базовый хлопок глубокого черного цвета. Oversize крой." },
-            { id: 2, name: "Heavy Boxy Tee / Pure White", price: 3200, density: "240 GSM • 100% Хлопок", img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80", desc: "Идеальный белый цвет, не просвечивает. Пенье высшего качества." },
-            { id: 3, name: "Community Logo Tee / Graphite", price: 3500, density: "260 GSM • 100% Хлопок", img: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=800&q=80", desc: "С эффектом минеральной варки и фирменным минималистичным принтом." },
-            { id: 4, name: "Essential Tee / Warm Sand", price: 3200, density: "240 GSM • 100% Хлопок", img: "https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&w=800&q=80", desc: "Мягкий песочный оттенок для стильных повседневных образов." },
-            { id: 5, name: "Archive Edition / Olive Drab", price: 3600, density: "260 GSM • 100% Хлопок", img: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80", desc: "Глубокий тактический оливковый цвет повышенной износостойкости." },
-            { id: 6, name: "Core Ribbed Tee / Cobalt Blue", price: 3400, density: "240 GSM • 100% Хлопок", img: "https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?auto=format&fit=crop&w=800&q=80", desc: "Насыщенный синий цвет, привлекающий внимание." },
-            { id: 7, name: "Minimalist Tee / Ash Grey", price: 3200, density: "240 GSM • 100% Хлопок", img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80", desc: "Универсальный меланжевый серый оттенок." },
-            { id: 8, name: "Vibe Tee / Vintage Brown", price: 3500, density: "260 GSM • 100% Хлопок", img: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=800&q=80", desc: "Винтажный коричневый с эффектом легкой потертости." },
-            { id: 9, name: "Raw Cotton Tee / Off-White", price: 3300, density: "240 GSM • 100% Хлопок", img: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=800&q=80", desc: "Натуральный неотбеленный хлопок с аутентичной текстурой." },
-            { id: 10, name: "Statement Tee / Midnight Navy", price: 3400, density: "240 GSM • 100% Хлопок", img: "https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&w=800&q=80", desc: "Темно-синий оттенок ночного неба." }
+            { 
+                id: 1, 
+                name: "BROKEN HEART T-SHIRT", 
+                price: 3600, 
+                density: "260 GSM • 100% Хлопок", 
+                img: "heart-front.jpg", 
+                imgBack: "heart-back.jpg",
+                desc: "Лимитированная футболка с принтом в виде разбитого сердца на груди и фирменным логотипом на спине. Плотный премиальный хлопок.",
+                soldOut: true 
+            },
+            { 
+                id: 2, 
+                name: "BASIC T-SHIRT (BLACK)", 
+                price: 3200, 
+                density: "240 GSM • 100% Хлопок", 
+                img: "black-front.jpg", 
+                imgBack: "black-back.jpg",
+                desc: "Классическая базовая футболка глубокого черного цвета. Ультраплотный оверсайз крой.",
+                soldOut: false 
+            },
+            { 
+                id: 3, 
+                name: "BASIC T-SHIRT (GRAY)", 
+                price: 3200, 
+                density: "240 GSM • 100% Хлопок", 
+                img: "gray-front.jpg", 
+                imgBack: "gray-back.jpg",
+                desc: "Базовая футболка вареного серого оттенка. Идеально держит форму после стирок.",
+                soldOut: false 
+            }
         ];
 
         let selectedSizes = {};
@@ -175,7 +186,8 @@
             container.innerHTML = products.map(p => {
                 selectedSizes[p.id] = 'M';
                 return `
-                    <div class="group flex flex-col justify-between bg-[#121215] border border-zinc-800/80 rounded-3xl p-5 hover:border-zinc-500 transition-all duration-500 shadow-xl">
+                    <div class="group flex flex-col justify-between bg-[#121215] border border-zinc-800/80 rounded-3xl p-5 hover:border-zinc-500 transition-all duration-500 shadow-xl relative overflow-hidden">
+                        ${p.soldOut ? '<div class="absolute top-4 right-4 z-20 bg-red-600 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">SOLD OUT</div>' : ''}
                         <div>
                             <div class="aspect-[4/5] bg-zinc-900 rounded-2xl overflow-hidden mb-5 relative cursor-pointer" onclick="openQuickView(${p.id})">
                                 <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
@@ -192,9 +204,10 @@
                                     </button>
                                 `).join('')}
                             </div>
-                            <button onclick="addToCart(${p.id})" class="w-full bg-zinc-900 text-white border border-zinc-800 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white hover:text-black hover:border-white transition-all duration-300">
-                                В корзину
-                            </button>
+                            ${p.soldOut 
+                                ? `<button disabled class="w-full bg-zinc-900 text-zinc-600 border border-zinc-800/50 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest cursor-not-allowed">Распродано</button>` 
+                                : `<button onclick="addToCart(${p.id})" class="w-full bg-zinc-900 text-white border border-zinc-800 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white hover:text-black hover:border-white transition-all duration-300">В корзину</button>`
+                            }
                         </div>
                     </div>
                 `;
@@ -218,8 +231,9 @@
             const modal = document.getElementById('quick-view-modal');
             const content = document.getElementById('quick-view-content');
             content.innerHTML = `
-                <div class="aspect-[4/5] bg-zinc-900 rounded-2xl overflow-hidden">
-                    <img src="${p.img}" class="w-full h-full object-cover">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="aspect-[4/5] bg-zinc-900 rounded-xl overflow-hidden"><img src="${p.img}" class="w-full h-full object-cover"></div>
+                    <div class="aspect-[4/5] bg-zinc-900 rounded-xl overflow-hidden"><img src="${p.imgBack}" class="w-full h-full object-cover"></div>
                 </div>
                 <div class="flex flex-col justify-between">
                     <div>
@@ -228,9 +242,10 @@
                         <p class="text-xl font-black text-white mb-4">${p.price.toLocaleString()} ₽</p>
                         <p class="text-zinc-400 text-sm leading-relaxed mb-6">${p.desc}</p>
                     </div>
-                    <button onclick="addToCart(${p.id}); closeQuickView();" class="w-full bg-white text-black font-black uppercase tracking-widest py-4 rounded-xl text-xs hover:bg-zinc-200 transition">
-                        Добавить в корзину (${selectedSizes[p.id] || 'M'})
-                    </button>
+                    ${p.soldOut 
+                        ? `<button disabled class="w-full bg-zinc-900 text-zinc-600 py-4 rounded-xl text-xs font-black uppercase tracking-widest cursor-not-allowed">Распродано</button>` 
+                        : `<button onclick="addToCart(${p.id}); closeQuickView();" class="w-full bg-white text-black font-black uppercase tracking-widest py-4 rounded-xl text-xs hover:bg-zinc-200 transition">Добавить в корзину (${selectedSizes[p.id] || 'M'})</button>`
+                    }
                 </div>
             `;
             modal.classList.remove('hidden');
@@ -242,6 +257,7 @@
 
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);
+            if (product.soldOut) return;
             const size = selectedSizes[productId] || 'M';
             const existing = cart.find(item => item.id === productId && item.size === size);
             if (existing) {
@@ -309,7 +325,7 @@
                          `💰 *ИТОГО:* ${total.toLocaleString()} ₽`;
 
             if (TELEGRAM_BOT_TOKEN === 'ВАШ_ТОКЕН_ОТ_BOTFATHER') {
-                alert('Демо-режим! Заказ сформирован:\n\n' + text + '\n\n(Вставьте токен вашего Telegram-бота в код, чтобы заявки приходили в мессенджер)');
+                alert('Демо-режим! Заказ сформирован:\n\n' + text);
                 cart = [];
                 updateCartUI();
                 toggleCart();
@@ -333,7 +349,7 @@
                 toggleCart();
                 e.target.reset();
             } catch (err) {
-                alert('Ошибка отправки. Проверьте соединение.');
+                alert('Ошибка отправки.');
             } finally {
                 btn.innerText = 'ОФОРМИТЬ ЗАКАЗ В TELEGRAM';
                 btn.disabled = false;
