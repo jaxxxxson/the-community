@@ -35,11 +35,11 @@
         </div>
     </header>
 
-    <!-- Первый экран -->
+    <!-- Первый экран с вашим баннером -->
     <section class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img src="heart-front.jpg" alt="Background" class="w-full h-full object-cover opacity-20 scale-105">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/80 to-[#0a0a0c]/50"></div>
+            <img src="banner.jpg" alt="Banner" class="w-full h-full object-cover opacity-30 scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/80 to-[#0a0a0c]/40"></div>
         </div>
 
         <div class="relative z-10 max-w-5xl mx-auto px-6 text-center animate-fade-in mt-12">
@@ -73,9 +73,9 @@
 
     <!-- Модальное окно быстрого просмотра -->
     <div id="quick-view-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-[#121215] border border-zinc-800 w-full max-w-2xl rounded-3xl overflow-hidden relative p-6 md:p-8 animate-fade-in">
-            <button onclick="closeQuickView()" class="absolute top-6 right-6 text-zinc-400 hover:text-white text-2xl w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center border border-zinc-800 transition">&times;</button>
-            <div id="quick-view-content" class="grid md:grid-cols-2 gap-8 items-center"></div>
+        <div class="bg-[#121215] border border-zinc-800 w-full max-w-2xl rounded-3xl overflow-hidden relative p-6 md:p-8 animate-fade-in max-h-[90vh] overflow-y-auto">
+            <button onclick="closeQuickView()" class="absolute top-6 right-6 text-zinc-400 hover:text-white text-2xl w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center border border-zinc-800 transition z-10">&times;</button>
+            <div id="quick-view-content" class="grid md:grid-cols-2 gap-8 items-start"></div>
         </div>
     </div>
 
@@ -145,35 +145,45 @@
         const TELEGRAM_BOT_TOKEN = 'ВАШ_ТОКЕН_ОТ_BOTFATHER';
         const TELEGRAM_CHAT_ID = 'ВАШ_CHAT_ID';
 
+        const sizeTableHTML = `
+            <div class="mt-4 pt-4 border-t border-zinc-800 text-xs text-zinc-300 space-y-1.5">
+                <p class="font-extrabold uppercase text-white mb-2">Размерная сетка:</p>
+                <p>• <strong class="text-white">S</strong> — длина (68), ширина (54), рукав (20)</p>
+                <p>• <strong class="text-white">M</strong> — длина (70), ширина (56), рукав (22)</p>
+                <p>• <strong class="text-white">L</strong> — длина (73), ширина (60), рукав (22)</p>
+                <p>• <strong class="text-white">XL</strong> — длина (75), ширина (63), рукав (22)</p>
+            </div>
+        `;
+
         const products = [
             { 
                 id: 1, 
                 name: "BROKEN HEART T-SHIRT", 
-                price: 3600, 
-                density: "260 GSM • 100% Хлопок", 
-                img: "heart-front.jpg", 
-                imgBack: "heart-back.jpg",
-                desc: "Лимитированная футболка с принтом в виде разбитого сердца на груди и фирменным логотипом на спине. Плотный премиальный хлопок.",
+                price: 2990, 
+                density: "230 GSM • 100% Хлопок", 
+                img: "1 сааайт.jpg", 
+                imgBack: "ПРИНТ СПИНА.jpg",
+                desc: "Футболка - 100% хлопок, 230 грамм.<br>Вареная футболка из хлопка, выполненная в стильном силуэте с принтом разбитого сердца и рефлективной надписью на спине.<br><br>Подробнее о правилах бренда и времени доставки можно прочитать в разделе FAQ.<br>- На картинке макет и он может отличатся от оригинала.<br>- Стирать при 30° и наизнанку.",
                 soldOut: true 
             },
             { 
                 id: 2, 
                 name: "BASIC T-SHIRT (BLACK)", 
-                price: 3200, 
+                price: 1490, 
                 density: "240 GSM • 100% Хлопок", 
-                img: "black-front.jpg", 
-                imgBack: "black-back.jpg",
-                desc: "Классическая базовая футболка глубокого черного цвета. Ультраплотный оверсайз крой.",
+                img: "1.jpg", 
+                imgBack: "1 (2).jpg",
+                desc: "Футболка - 100% хлопок, 240 грамм.<br>Вареная футболка из хлопка, выполненная в стильном силуэте.<br><br>Подробнее о правилах бренда и времени доставки можно прочитать в разделе FAQ.<br>- На картинке макет и он может отличатся от оригинала.<br>- Стирать при 30° и наизнанку.",
                 soldOut: false 
             },
             { 
                 id: 3, 
                 name: "BASIC T-SHIRT (GRAY)", 
-                price: 3200, 
+                price: 1490, 
                 density: "240 GSM • 100% Хлопок", 
-                img: "gray-front.jpg", 
-                imgBack: "gray-back.jpg",
-                desc: "Базовая футболка вареного серого оттенка. Идеально держит форму после стирок.",
+                img: "2.jpg", 
+                imgBack: "2 (2).jpg",
+                desc: "Футболка - 100% хлопок, 240 грамм.<br>Вареная футболка из хлопка, выполненная в стильном силуэте.<br><br>Подробнее о правилах бренда и времени доставки можно прочитать в разделе FAQ.<br>- На картинке макет и он может отличатся от оригинала.<br>- Стирать при 30° и наизнанку.",
                 soldOut: false 
             }
         ];
@@ -187,7 +197,7 @@
                 selectedSizes[p.id] = 'M';
                 return `
                     <div class="group flex flex-col justify-between bg-[#121215] border border-zinc-800/80 rounded-3xl p-5 hover:border-zinc-500 transition-all duration-500 shadow-xl relative overflow-hidden">
-                        ${p.soldOut ? '<div class="absolute top-4 right-4 z-20 bg-red-600 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">SOLD OUT</div>' : ''}
+                        ${p.soldOut ? '<div class="absolute top-4 right-4 z-20 flex gap-1.5"><span class="bg-amber-500 text-black text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-md shadow-md">LIMITED</span><span class="bg-red-600 text-white text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-md shadow-md">SOLD OUT</span></div>' : ''}
                         <div>
                             <div class="aspect-[4/5] bg-zinc-900 rounded-2xl overflow-hidden mb-5 relative cursor-pointer" onclick="openQuickView(${p.id})">
                                 <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
@@ -231,7 +241,7 @@
             const modal = document.getElementById('quick-view-modal');
             const content = document.getElementById('quick-view-content');
             content.innerHTML = `
-                <div class="grid grid-cols-2 gap-3">
+                <div class="space-y-3">
                     <div class="aspect-[4/5] bg-zinc-900 rounded-xl overflow-hidden"><img src="${p.img}" class="w-full h-full object-cover"></div>
                     <div class="aspect-[4/5] bg-zinc-900 rounded-xl overflow-hidden"><img src="${p.imgBack}" class="w-full h-full object-cover"></div>
                 </div>
@@ -240,12 +250,15 @@
                         <span class="text-xs text-zinc-400 font-bold uppercase tracking-widest">${p.density}</span>
                         <h2 class="text-2xl font-black text-white mt-2 mb-2">${p.name}</h2>
                         <p class="text-xl font-black text-white mb-4">${p.price.toLocaleString()} ₽</p>
-                        <p class="text-zinc-400 text-sm leading-relaxed mb-6">${p.desc}</p>
+                        <div class="text-zinc-300 text-xs leading-relaxed space-y-2 mb-4">${p.desc}</div>
+                        ${sizeTableHTML}
                     </div>
-                    ${p.soldOut 
-                        ? `<button disabled class="w-full bg-zinc-900 text-zinc-600 py-4 rounded-xl text-xs font-black uppercase tracking-widest cursor-not-allowed">Распродано</button>` 
-                        : `<button onclick="addToCart(${p.id}); closeQuickView();" class="w-full bg-white text-black font-black uppercase tracking-widest py-4 rounded-xl text-xs hover:bg-zinc-200 transition">Добавить в корзину (${selectedSizes[p.id] || 'M'})</button>`
-                    }
+                    <div class="mt-6">
+                        ${p.soldOut 
+                            ? `<button disabled class="w-full bg-zinc-900 text-zinc-600 py-4 rounded-xl text-xs font-black uppercase tracking-widest cursor-not-allowed">Распродано (Limited)</button>` 
+                            : `<button onclick="addToCart(${p.id}); closeQuickView();" class="w-full bg-white text-black font-black uppercase tracking-widest py-4 rounded-xl text-xs hover:bg-zinc-200 transition">Добавить в корзину (${selectedSizes[p.id] || 'M'})</button>`
+                        }
+                    </div>
                 </div>
             `;
             modal.classList.remove('hidden');
