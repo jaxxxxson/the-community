@@ -35,10 +35,10 @@
         </div>
     </header>
 
-    <!-- Первый экран -->
-    <section class="relative h-screen flex items-center justify-center overflow-hidden bg-zinc-950">
+    <!-- Первый экран с вашим баннером -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img src="banner.jpg" alt="Banner" class="w-full h-full object-cover opacity-40 scale-105" onerror="this.src='https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&w=2000&q=80'">
+            <img src="banner.jpg" alt="Banner" class="w-full h-full object-cover opacity-40 scale-105">
             <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/80 to-[#0a0a0c]/40"></div>
         </div>
 
@@ -71,11 +71,20 @@
         <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14"></div>
     </main>
 
-    <!-- Модальное окно быстрого просмотра -->
+    <!-- Модальное окно быстрого просмотра товара -->
     <div id="quick-view-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121215] border border-zinc-800 w-full max-w-2xl rounded-3xl overflow-hidden relative p-6 md:p-8 animate-fade-in max-h-[90vh] overflow-y-auto">
             <button onclick="closeQuickView()" class="absolute top-6 right-6 text-zinc-400 hover:text-white text-2xl w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center border border-zinc-800 transition z-10">&times;</button>
             <div id="quick-view-content" class="grid md:grid-cols-2 gap-8 items-start"></div>
+        </div>
+    </div>
+
+    <!-- Общее текстовое модальное окно для FAQ и Правовых документов -->
+    <div id="info-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#121215] border border-zinc-800 w-full max-w-3xl rounded-3xl overflow-hidden relative p-6 md:p-10 animate-fade-in max-h-[85vh] flex flex-col">
+            <button onclick="closeInfoModal()" class="absolute top-6 right-6 text-zinc-400 hover:text-white text-2xl w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center border border-zinc-800 transition z-10">&times;</button>
+            <h3 id="info-modal-title" class="text-xl font-black uppercase text-white mb-6"></h3>
+            <div id="info-modal-body" class="text-zinc-300 text-xs sm:text-sm leading-relaxed overflow-y-auto pr-2 space-y-4"></div>
         </div>
     </div>
 
@@ -85,28 +94,26 @@
             <div>
                 <h4 class="text-white font-extrabold uppercase tracking-wider mb-4 text-xs">Социальные сети</h4>
                 <ul class="space-y-2.5">
-                    <li><a href="https://t.me/" target="_blank" class="hover:text-white transition">Telegram</a></li>
-                    <li><a href="#" class="hover:text-white transition">VK</a></li>
+                    <li><a href="https://t.me/thecommunitybrand" target="_blank" class="hover:text-white transition">Telegram</a></li>
+                    <li><a href="https://vk.ru/thecommunitybrand" target="_blank" class="hover:text-white transition">VK</a></li>
                 </ul>
             </div>
             <div>
                 <h4 class="text-white font-extrabold uppercase tracking-wider mb-4 text-xs">Контакты</h4>
-                <p class="mb-2">+7 (993) 345-54-54</p>
                 <a href="mailto:thecommunitybrand@yandex.ru" class="hover:text-white transition break-all">thecommunitybrand@yandex.ru</a>
             </div>
             <div>
                 <h4 class="text-white font-extrabold uppercase tracking-wider mb-4 text-xs">FAQ</h4>
                 <ul class="space-y-2.5">
-                    <li><a href="#" class="hover:text-white transition">Блогерам и медиа лицам</a></li>
-                    <li><a href="#" class="hover:text-white transition">Вопросы и ответы</a></li>
+                    <li><button onclick="openBloggersModal()" class="hover:text-white transition text-left">Блогерам и медиа лицам</button></li>
+                    <li><a href="#catalog" class="hover:text-white transition">Вопросы и ответы</a></li>
                 </ul>
             </div>
             <div>
                 <h4 class="text-white font-extrabold uppercase tracking-wider mb-4 text-xs">Другое</h4>
                 <ul class="space-y-2.5">
-                    <li><a href="#" class="hover:text-white transition">Политика конфиденциальности</a></li>
-                    <li><a href="#" class="hover:text-white transition">Договор оферты</a></li>
-                    <li><a href="#" class="hover:text-white transition">Дополнительная информация</a></li>
+                    <li><button onclick="openPrivacyModal()" class="hover:text-white transition text-left">Политика конфиденциальности</button></li>
+                    <li><button onclick="openOfferModal()" class="hover:text-white transition text-left">Договор оферты</button></li>
                 </ul>
             </div>
         </div>
@@ -200,7 +207,7 @@
                         ${p.soldOut ? '<div class="absolute top-4 right-4 z-20 flex gap-1.5"><span class="bg-amber-500 text-black text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-md shadow-md">LIMITED</span><span class="bg-red-600 text-white text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-md shadow-md">SOLD OUT</span></div>' : ''}
                         <div>
                             <div class="aspect-[4/5] bg-zinc-900 rounded-2xl overflow-hidden mb-5 relative cursor-pointer" onclick="openQuickView(${p.id})">
-                                <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" onerror="this.src='https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=800&q=80'">
+                                <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
                                 <span class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-full border border-zinc-700 text-zinc-200">${p.density}</span>
                             </div>
                             <h3 class="font-bold text-base text-white tracking-tight">${p.name}</h3>
@@ -266,6 +273,67 @@
 
         function closeQuickView() {
             document.getElementById('quick-view-modal').classList.add('hidden');
+        }
+
+        function openBloggersModal() {
+            document.getElementById('info-modal-title').innerText = "Блогерам и медиа лицам";
+            document.getElementById('info-modal-body').innerHTML = "<p class='text-base leading-relaxed'>Если вы блоггер или у вас есть аудитория в социальных сетях, пишите на почту: <a href='mailto:thecommunitybrand@yandex.ru' class='text-white underline font-bold'>thecommunitybrand@yandex.ru</a> Мы сможем договориться о сотрудничестве.</p>";
+            document.getElementById('info-modal').classList.remove('hidden');
+        }
+
+        function openPrivacyModal() {
+            document.getElementById('info-modal-title').innerText = "Политика конфиденциальности";
+            document.getElementById('info-modal-body').innerHTML = `
+                <p><strong>1. Общие положения</strong></p>
+                <p>Настоящая политика обработки персональных данных составлена в соответствии с требованиями Федерального закона от 27.07.2006. №152-ФЗ «О персональных данных» и определяет порядок обработки персональных данных и меры по обеспечению безопасности персональных данных, предпринимаемые ИП Никоноренков Евгений Петрович, ОГРНИП 323774600540485 (далее – Оператор).</p>
+                <p>1.1. Оператор ставит своей важнейшей целью и условием осуществления своей деятельности соблюдение прав и свобод человека и гражданина при обработке его персональных данных, в том числе защиты прав на неприкосновенность частной жизни, личную и семейную тайну.</p>
+                <p>1.2. Настоящая политика Оператора в отношении обработки персональных данных применяется ко всей информации, которую Оператор может получить о посетителях веб-сайта http://the-community.ru/.</p>
+                
+                <p><strong>2. Основные понятия</strong></p>
+                <p>2.1. Автоматизированная обработка персональных данных – обработка персональных данных с помощью средств вычислительной техники;</p>
+                <p>2.2. Веб-сайт – совокупность графических и информационных материалов, а также программ для ЭВМ и баз данных, обеспечивающих их доступность в сети интернет по сетевому адресу http://the-community.ru/.</p>
+                <p>2.3. Обработка персональных данных – любое действие с использованием средств автоматизации или без них, включая сбор, запись, систематизацию, накопление, хранение, уточнение, извлечение, использование, передачу, обезличивание, блокирование, удаление, уничтожение.</p>
+                <p>2.4. Пользователь – любой посетитель веб-сайта http://the-community.ru/.</p>
+
+                <p><strong>3. Персональные данные, которые обрабатывает Оператор</strong></p>
+                <p>3.1. Фамилия, имя, отчество;<br>3.2. Электронный адрес;<br>3.3. Номера телефонов;<br>3.4. Адрес фактического места проживания или пребывания;<br>3.5. Обезличенные данные о посетителях (файлы cookie) с помощью сервисов интернет-статистики.</p>
+
+                <p><strong>4. Цели обработки персональных данных</strong></p>
+                <p>4.1. Информирование Пользователя посредством отправки электронных писем; осуществление отправки заказов по месту проживания или пребывания.<br>4.2. Срок обработки является неограниченным. Отзыв согласия осуществляется путем направления письма на thecommunitybrand@yandex.ru.</p>
+
+                <p><strong>8. Заключительные положения</strong></p>
+                <p>8.1. По любым вопросам можно обратиться к Оператору через thecommunitybrand@yandex.ru.</p>
+            `;
+            document.getElementById('info-modal').classList.remove('hidden');
+        }
+
+        function openOfferModal() {
+            document.getElementById('info-modal-title').innerText = "Договор оферты";
+            document.getElementById('info-modal-body').innerHTML = `
+                <p><strong>1. Основные понятия и определения</strong></p>
+                <p>1.1. Продавец – ИП Никоноренков Евгений Петрович, ОГРНИП 323774600540485;<br>
+                1.2. Публичная оферта – публичное предложение Продавца заключить договор купли-продажи товаров дистанционным способом;<br>
+                1.3. Покупатель – физическое лицо, размещающее Заказ на сайте http://the-community.ru;<br>
+                1.4. Товар – изделия российского производства, предлагаемые к продаже на сайте;<br>
+                1.5. Интернет-магазин – сайт http://the-community.ru.</p>
+
+                <p><strong>2. Общие положения</strong></p>
+                <p>2.1. Заказывая Товар на сайте http://the-community.ru Покупатель выражает свое согласие с условиями продажи.<br>
+                2.2. Настоящие условия являются публичной офертой в соответствии со ст. 435 и п.2 ст. 437 ГК РФ.</p>
+
+                <p><strong>5. Стоимость Товара и способы оплаты</strong></p>
+                <p>5.1. Цена на Товар указана в рублях.<br>
+                5.4. Оплата Товара производится банковской картой при оформлении Заказа на сайте.</p>
+
+                <p><strong>6. Возврат Товара</strong></p>
+                <p>6.1. Гарантийный срок на Товар равен 3 (трём) дням с момента передачи Покупателю.<br>
+                6.5. Товар надлежащего качества, полученный Покупателем, обмену и возврату не подлежит.</p>
+            `;
+            document.getElementById('info-modal').classList.remove('hidden');
+        }
+
+        function closeInfoModal() {
+            document.getElementById('info-modal').classList.add('hidden');
         }
 
         function addToCart(productId) {
