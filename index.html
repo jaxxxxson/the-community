@@ -35,7 +35,7 @@
         </div>
     </header>
 
-    <!-- Первый экран с вашим баннером -->
+    <!-- Первый экран -->
     <section class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
             <img src="banner.jpg" alt="Banner" class="w-full h-full object-cover opacity-30 scale-105">
@@ -160,10 +160,10 @@
                 id: 1, 
                 name: "BROKEN HEART T-SHIRT", 
                 price: 2990, 
-                density: "230 GSM • 100% Хлопок", 
-                img: "1 сааайт.jpg", 
-                imgBack: "ПРИНТ СПИНА.jpg",
-                desc: "Футболка - 100% хлопок, 230 грамм.<br>Вареная футболка из хлопка, выполненная в стильном силуэте с принтом разбитого сердца и рефлективной надписью на спине.<br><br>Подробнее о правилах бренда и времени доставки можно прочитать в разделе FAQ.<br>- На картинке макет и он может отличатся от оригинала.<br>- Стирать при 30° и наизнанку.",
+                density: "240 GSM • 100% Хлопок", 
+                img: "heart-front.jpg", 
+                imgBack: "heart-back.jpg",
+                desc: "Футболка - 100% хлопок, 240 грамм.<br>Вареная футболка из хлопка, выполненная в стильном силуэте с принтом разбитого сердца и рефлективной надписью на спине.<br><br>Подробнее о правилах бренда и времени доставки можно прочитать в разделе FAQ.<br>- На картинке макет и он может отличатся от оригинала.<br>- Стирать при 30° и наизнанку.",
                 soldOut: true 
             },
             { 
@@ -171,8 +171,8 @@
                 name: "BASIC T-SHIRT (BLACK)", 
                 price: 1490, 
                 density: "240 GSM • 100% Хлопок", 
-                img: "1.jpg", 
-                imgBack: "1 (2).jpg",
+                img: "black-front.jpg", 
+                imgBack: "black-back.jpg",
                 desc: "Футболка - 100% хлопок, 240 грамм.<br>Вареная футболка из хлопка, выполненная в стильном силуэте.<br><br>Подробнее о правилах бренда и времени доставки можно прочитать в разделе FAQ.<br>- На картинке макет и он может отличатся от оригинала.<br>- Стирать при 30° и наизнанку.",
                 soldOut: false 
             },
@@ -181,8 +181,8 @@
                 name: "BASIC T-SHIRT (GRAY)", 
                 price: 1490, 
                 density: "240 GSM • 100% Хлопок", 
-                img: "2.jpg", 
-                imgBack: "2 (2).jpg",
+                img: "gray-front.jpg", 
+                imgBack: "gray-back.jpg",
                 desc: "Футболка - 100% хлопок, 240 грамм.<br>Вареная футболка из хлопка, выполненная в стильном силуэте.<br><br>Подробнее о правилах бренда и времени доставки можно прочитать в разделе FAQ.<br>- На картинке макет и он может отличатся от оригинала.<br>- Стирать при 30° и наизнанку.",
                 soldOut: false 
             }
@@ -296,81 +296,4 @@
                 return;
             }
             let total = 0;
-            itemsContainer.innerHTML = cart.map((item, idx) => {
-                total += item.price * item.qty;
-                return `
-                    <div class="flex justify-between items-center bg-zinc-900/60 border border-zinc-800 p-4 rounded-2xl">
-                        <div>
-                            <p class="font-bold text-sm text-white">${item.name}</p>
-                            <p class="text-xs text-zinc-400 mt-1">Размер: <span class="text-white font-bold">${item.size}</span> | ${item.qty} шт. × ${item.price} ₽</p>
-                        </div>
-                        <button onclick="removeFromCart(${idx})" class="text-xs text-red-400 hover:text-red-300 font-semibold px-3 py-1 bg-red-950/40 rounded-lg border border-red-900/40">Удалить</button>
-                    </div>
-                `;
-            }).join('');
-            document.getElementById('cart-total').innerText = total.toLocaleString() + ' ₽';
-        }
-
-        function toggleCart(forceOpen = false) {
-            const modal = document.getElementById('cart-modal');
-            if (forceOpen) {
-                modal.classList.remove('hidden');
-            } else {
-                modal.classList.toggle('hidden');
-            }
-        }
-
-        async function sendOrder(e) {
-            e.preventDefault();
-            if (cart.length === 0) return alert('Корзина пуста!');
-
-            const name = document.getElementById('cust-name').value;
-            const contact = document.getElementById('cust-contact').value;
-            const address = document.getElementById('cust-address').value;
-            const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-
-            const itemsList = cart.map((i, idx) => `${idx + 1}. ${i.name} [Размер: ${i.size}] — ${i.qty} шт. (${i.price * i.qty} ₽)`).join('\n');
-            const text = `🖤 *НОВЫЙ ЗАКАЗ — THE COMMUNITY*\n\n` +
-                         `👤 *Клиент:* ${name}\n` +
-                         `📱 *Связь:* ${contact}\n` +
-                         `📍 *Пункт выдачи:* ${address}\n\n` +
-                         `👕 *Товары:*\n${itemsList}\n\n` +
-                         `💰 *ИТОГО:* ${total.toLocaleString()} ₽`;
-
-            if (TELEGRAM_BOT_TOKEN === 'ВАШ_ТОКЕН_ОТ_BOTFATHER') {
-                alert('Демо-режим! Заказ сформирован:\n\n' + text);
-                cart = [];
-                updateCartUI();
-                toggleCart();
-                e.target.reset();
-                return;
-            }
-
-            const btn = document.getElementById('submit-btn');
-            btn.innerText = 'ОТПРАВКА...';
-            btn.disabled = true;
-
-            try {
-                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text, parse_mode: 'Markdown' })
-                });
-                alert('Заказ успешно оформлен! Мы свяжемся с вами в Telegram.');
-                cart = [];
-                updateCartUI();
-                toggleCart();
-                e.target.reset();
-            } catch (err) {
-                alert('Ошибка отправки.');
-            } finally {
-                btn.innerText = 'ОФОРМИТЬ ЗАКАЗ В TELEGRAM';
-                btn.disabled = false;
-            }
-        }
-
-        renderCatalog();
-        updateCartUI();
-    </script>
-</body>
-</html>
+            itemsContainer.innerHTML
