@@ -36,9 +36,9 @@
     </header>
 
     <!-- Первый экран -->
-    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+    <section class="relative h-screen flex items-center justify-center overflow-hidden bg-zinc-950">
         <div class="absolute inset-0 z-0">
-            <img src="banner.jpg" alt="Banner" class="w-full h-full object-cover opacity-30 scale-105">
+            <img src="banner.jpg" alt="Banner" class="w-full h-full object-cover opacity-40 scale-105" onerror="this.src='https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&w=2000&q=80'">
             <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/80 to-[#0a0a0c]/40"></div>
         </div>
 
@@ -200,7 +200,7 @@
                         ${p.soldOut ? '<div class="absolute top-4 right-4 z-20 flex gap-1.5"><span class="bg-amber-500 text-black text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-md shadow-md">LIMITED</span><span class="bg-red-600 text-white text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-md shadow-md">SOLD OUT</span></div>' : ''}
                         <div>
                             <div class="aspect-[4/5] bg-zinc-900 rounded-2xl overflow-hidden mb-5 relative cursor-pointer" onclick="openQuickView(${p.id})">
-                                <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                                <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" onerror="this.src='https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=800&q=80'">
                                 <span class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-full border border-zinc-700 text-zinc-200">${p.density}</span>
                             </div>
                             <h3 class="font-bold text-base text-white tracking-tight">${p.name}</h3>
@@ -296,4 +296,81 @@
                 return;
             }
             let total = 0;
-            itemsContainer.innerHTML
+            itemsContainer.innerHTML = cart.map((item, idx) => {
+                total += item.price * item.qty;
+                return `
+                    <div class="flex justify-between items-center bg-zinc-900/60 border border-zinc-800 p-4 rounded-2xl">
+                        <div>
+                            <p class="font-bold text-sm text-white">${item.name}</p>
+                            <p class="text-xs text-zinc-400 mt-1">Размер: <span class="text-white font-bold">${item.size}</span> | ${item.qty} шт. × ${item.price} ₽</p>
+                        </div>
+                        <button onclick="removeFromCart(${idx})" class="text-xs text-red-400 hover:text-red-300 font-semibold px-3 py-1 bg-red-950/40 rounded-lg border border-red-900/40">Удалить</button>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('cart-total').innerText = total.toLocaleString() + ' ₽';
+        }
+
+        function toggleCart(forceOpen = false) {
+            const modal = document.getElementById('cart-modal');
+            if (forceOpen) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.toggle('hidden');
+            }
+        }
+
+        async function sendOrder(e) {
+            e.preventDefault();
+            if (cart.length === 0) return alert('Корзина пуста!');
+
+            const name = document.getElementById('cust-name').value;
+            const contact = document.getElementById('cust-contact').value;
+            const address = document.getElementById('cust-address').value;
+            const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+
+            const itemsList = cart.map((i, idx) => `${idx + 1}. ${i.name} [Размер: ${i.size}] — ${i.qty} шт. (${i.price * i.qty} ₽)`).join('\n');
+            const text = `🖤 *НОВЫЙ ЗАКАЗ — THE COMMUNITY*\n\n` +
+                         `👤 *Клиент:* ${name}\n` +
+                         `📱 *Связь:* ${contact}\n` +
+                         `📍 *Пункт выдачи:* ${address}\n\n` +
+                         `👕 *Товары:*\n${itemsList}\n\n` +
+                         `💰 *ИТОГО:* ${total.toLocaleString()} ₽`;
+
+            if (TELEGRAM_BOT_TOKEN === 'ВАШ_ТОКЕН_ОТ_BOTFATHER') {
+                alert('Демо-режим! Заказ сформирован:\n\n' + text);
+                cart = [];
+                updateCartUI();
+                toggleCart();
+                e.target.reset();
+                return;
+            }
+
+            const btn = document.getElementById('submit-btn');
+            btn.innerText = 'ОТПРАВКА...';
+            btn.disabled = true;
+
+            try {
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text, parse_mode: 'Markdown' })
+                });
+                alert('Заказ успешно оформлен! Мы свяжемся с вами в Telegram.');
+                cart = [];
+                updateCartUI();
+                toggleCart();
+                e.target.reset();
+            } catch (err) {
+                alert('Ошибка отправки.');
+            } finally {
+                btn.innerText = 'ОФОРМИТЬ ЗАКАЗ В TELEGRAM';
+                btn.disabled = false;
+            }
+        }
+
+        renderCatalog();
+        updateCartUI();
+    </script>
+</body>
+</html>
