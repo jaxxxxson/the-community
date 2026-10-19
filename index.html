@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE COMMUNITY — 100% Heavyweight Cotton</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .size-btn.active { background-color: #000; color: #fff; border-color: #000; }
+    </style>
+</head>
+<body class="bg-[#FAFAFA] text-zinc-900 antialiased selection:bg-black selection:text-white">
+
+    <!-- Шапка -->
+    <header class="sticky top-0 z-30 bg-[#FAFAFA]/90 backdrop-blur-md border-b border-zinc-200">
+        <div class="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="#" class="text-2xl font-extrabold tracking-tighter uppercase">THE COMMUNITY.</a>
+            <button onclick="toggleCart()" class="flex items-center space-x-2 text-sm font-semibold uppercase tracking-wider border border-zinc-900 px-4 py-2 hover:bg-zinc-900 hover:text-white transition">
+                <span>Корзина</span>
+                <span id="cart-count" class="bg-zinc-900 text-white px-1.5 py-0.5 text-xs rounded-full">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Главный баннер -->
+    <section class="max-w-6xl mx-auto px-4 py-16 md:py-24 border-b border-zinc-200">
+        <p class="text-xs uppercase tracking-[0.3em] text-zinc-500 mb-4">Drop 01 / 100% Organic Cotton</p>
+        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight max-w-3xl leading-tight mb-6">
+            БАЗОВЫЕ ФУТБОЛКИ ПОВЫШЕННОЙ ПЛОТНОСТИ ДЛЯ СВОИХ.
+        </h1>
+        <p class="text-zinc-600 max-w-xl text-lg">
+            Идеальный оверсайз крой, плотный премиальный хлопок (240 г/м²), который держит форму и не выцветает после стирок.
+        </p>
+    </section>
+
+    <!-- Каталог (генерируется из списка ниже) -->
+    <main class="max-w-6xl mx-auto px-4 py-16">
+        <div class="flex justify-between items-end mb-10">
+            <h2 class="text-xl font-bold uppercase tracking-wider">Коллекция (6 из 10)</h2>
+            <span class="text-sm text-zinc-500">Выберите размер на карточке</span>
+        </div>
+        <div id="catalog" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12"></div>
+    </main>
+
+    <!-- О бренде / Доставка -->
+    <section class="bg-zinc-900 text-white py-16 mt-16">
+        <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8 text-sm">
+            <div>
+                <h3 class="font-bold uppercase tracking-wider mb-2">100% Хлопок Пенье</h3>
+                <p class="text-zinc-400">Используем только длинноволокнистый хлопок высшей категории без синтетических примесей.</p>
+            </div>
+            <div>
+                <h3 class="font-bold uppercase tracking-wider mb-2">Доставка по всей РФ</h3>
+                <p class="text-zinc-400">Отправляем СДЭК и Почтой России в течение 24 часов после подтверждения заказа.</p>
+            </div>
+            <div>
+                <h3 class="font-bold uppercase tracking-wider mb-2">THE-COMMUNITY.COM</h3>
+                <p class="text-zinc-400">По всем вопросам и уходу за изделиями пишите в наш Telegram.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Боковая корзина -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex justify-end">
+        <div class="bg-white w-full max-w-md h-full flex flex-col justify-between p-6 overflow-y-auto">
+            <div>
+                <div class="flex justify-between items-center border-b pb-4 mb-6">
+                    <h2 class="text-lg font-extrabold uppercase tracking-wider">Ваш заказ</h2>
+                    <button onclick="toggleCart()" class="text-zinc-400 hover:text-black text-2xl">&times;</button>
+                </div>
+                <div id="cart-items" class="space-y-4"></div>
+            </div>
+
+            <div class="border-t pt-6 mt-6">
+                <div class="flex justify-between text-lg font-bold mb-6">
+                    <span>Итого:</span>
+                    <span id="cart-total">0 ₽</span>
+                </div>
+
+                <!-- Форма заказа -->
+                <form id="order-form" onsubmit="sendOrder(event)" class="space-y-3">
+                    <input type="text" id="cust-name" required placeholder="Ваше имя и фамилия" class="w-full border border-zinc-300 p-3 text-sm focus:outline-none focus:border-black">
+                    <input type="text" id="cust-contact" required placeholder="Ваш Telegram (@username) или телефон" class="w-full border border-zinc-300 p-3 text-sm focus:outline-none focus:border-black">
+                    <input type="text" id="cust-address" required placeholder="Город и адрес пункта СДЭК" class="w-full border border-zinc-300 p-3 text-sm focus:outline-none focus:border-black">
+                    <button type="submit" id="submit-btn" class="w-full bg-black text-white font-bold uppercase tracking-widest py-4 text-sm hover:bg-zinc-800 transition">
+                        Оформить заказ
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. НАСТРОЙКИ TELEGRAM БОТА (ВСТАВИТЬ СЮДА)
+        // ==========================================
+        const TELEGRAM_BOT_TOKEN = 'ВАШ_ТОКЕН_ОТ_BOTFATHER';
+        const TELEGRAM_CHAT_ID = 'ВАШ_CHAT_ID';
+
+        // ==========================================
+        // 2. СПИСОК ТОВАРОВ (Меняйте названия, цены и фото здесь)
+        // ==========================================
+        const products = [
+            { id: 1, name: "Heavy Boxy Tee / Jet Black", price: 3200, density: "240 г/м² • Oversize", img: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=800&q=80" },
+            { id: 2, name: "Heavy Boxy Tee / Pure White", price: 3200, density: "240 г/м² • Oversize", img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80" },
+            { id: 3, name: "Community Logo Tee / Graphite", price: 3500, density: "260 г/м² • Washed Effect", img: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=800&q=80" },
+            { id: 4, name: "Essential Tee / Warm Sand", price: 3200, density: "240 г/м² • Relaxed Fit", img: "https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&w=800&q=80" },
+            { id: 5, name: "Archive Edition / Olive Drab", price: 3600, density: "260 г/м² • Heavy Cotton", img: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80" },
+            { id: 6, name: "Core Ribbed Tee / Cobalt Blue", price: 3400, density: "240 г/м² • Oversize", img: "https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?auto=format&fit=crop&w=800&q=80" }
+        ];
+
+        let selectedSizes = {};
+        let cart = [];
+
+        // Отрисовка витрины
+        function renderCatalog() {
+            const container = document.getElementById('catalog');
+            products.forEach(p => {
+                selectedSizes[p.id] = 'M'; // Размер по умолчанию
+                container.innerHTML += `
+                    <div class="group flex flex-col justify-between">
+                        <div>
+                            <div class="aspect-[4/5] bg-zinc-200 overflow-hidden mb-4 relative">
+                                <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 left-3 bg-white/90 backdrop-blur px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider">${p.density}</span>
+                            </div>
+                            <h3 class="font-bold text-base">${p.name}</h3>
+                            <p class="text-zinc-600 font-medium mt-1 mb-3">${p.price.toLocaleString()} ₽</p>
+                        </div>
+                        <div>
+                            <div class="flex space-x-2 mb-3" id="sizes-${p.id}">
+                                ${['S', 'M', 'L', 'XL'].map(size => `
+                                    <button onclick="selectSize(${p.id}, '${size}')" class="size-btn ${size === 'M' ? 'active' : ''} flex-1 py-1.5 text-xs font-bold border border-zinc-300 hover:border-black transition">
+                                        ${size}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <button onclick="addToCart(${p.id})" class="w-full bg-zinc-900 text-white py-3 text-xs font-bold uppercase tracking-widest hover:bg-zinc-700 transition">
+                                В корзину
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectSize(productId, size) {
+            selectedSizes[productId] = size;
+            const btns = document.querySelectorAll(`#sizes-${productId} .size-btn`);
+            btns.forEach(btn => {
+                btn.classList.toggle('active', btn.innerText.trim() === size);
+            });
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const size = selectedSizes[productId];
+            const existing = cart.find(item => item.id === productId && item.size === size);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, size, qty: 1 });
+            }
+            updateCartUI();
+            toggleCart(true);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.reduce((sum, i) => sum + i.qty, 0);
+            const itemsContainer = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                itemsContainer.innerHTML = '<p class="text-zinc-400 text-sm">В корзине пока пусто.</p>';
+                document.getElementById('cart-total').innerText = '0 ₽';
+                return;
+            }
+            let total = 0;
+            itemsContainer.innerHTML = cart.map((item, idx) => {
+                total += item.price * item.qty;
+                return `
+                    <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
+                        <div>
+                            <p class="font-bold text-sm">${item.name}</p>
+                            <p class="text-xs text-zinc-500">Размер: ${item.size} | ${item.qty} шт. × ${item.price} ₽</p>
+                        </div>
+                        <button onclick="removeFromCart(${idx})" class="text-xs text-red-500 hover:underline">Удалить</button>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('cart-total').innerText = total.toLocaleString() + ' ₽';
+        }
+
+        function toggleCart(forceOpen = false) {
+            const modal = document.getElementById('cart-modal');
+            if (forceOpen) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.toggle('hidden');
+            }
+        }
+
+        async function sendOrder(e) {
+            e.preventDefault();
+            if (cart.length === 0) return alert('Добавьте хотя бы одну футболку в корзину!');
+
+            const name = document.getElementById('cust-name').value;
+            const contact = document.getElementById('cust-contact').value;
+            const address = document.getElementById('cust-address').value;
+            const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+
+            const itemsList = cart.map((i, idx) => `${idx + 1}. ${i.name} [Размер: ${i.size}] — ${i.qty} шт. (${i.price * i.qty} ₽)`).join('\n');
+            const text = `🖤 *НОВЫЙ ЗАКАЗ — THE COMMUNITY*\n\n` +
+                         `👤 *Клиент:* ${name}\n` +
+                         `📱 *Связь:* ${contact}\n` +
+                         `📍 *Доставка:* ${address}\n\n` +
+                         `👕 *Состав заказа:*\n${itemsList}\n\n` +
+                         `💰 *ИТОГО К ОПЛАТЕ:* ${total.toLocaleString()} ₽`;
+
+            if (TELEGRAM_BOT_TOKEN === 'ВАШ_ТОКЕН_ОТ_BOTFATHER') {
+                alert('Демо-режим! Заказ сформирован:\n\n' + text + '\n\n(Чтобы он прилетал в Telegram, вставьте токен бота в код)');
+                cart = [];
+                updateCartUI();
+                toggleCart();
+                e.target.reset();
+                return;
+            }
+
+            const btn = document.getElementById('submit-btn');
+            btn.innerText = 'ОТПРАВКА...';
+            btn.disabled = true;
+
+            try {
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text, parse_mode: 'Markdown' })
+                });
+                alert('Спасибо за заказ! Мы свяжемся с вами в Telegram в ближайшее время.');
+                cart = [];
+                updateCartUI();
+                toggleCart();
+                e.target.reset();
+            } catch (err) {
+                alert('Ошибка при отправке. Проверьте подключение.');
+            } finally {
+                btn.innerText = 'ОФОРМИТЬ ЗАКАЗ';
+                btn.disabled = false;
+            }
+        }
+
+        renderCatalog();
+        updateCartUI();
+    </script>
+</body>
+</html>
